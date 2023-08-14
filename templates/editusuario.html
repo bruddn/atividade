@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <title> Pegue aqui - Edição de {{titulo}}</title>
+</head>
+
+<body>
+    <h1> Bem vindo ao Pegue aqui!</h1>
+    <a href={{url_for("cadusuario")}}>Cadastro Usuário</a>
+    <a href={{url_for("relCompras")}}>Relatório de Compras</a>
+    <a href={{url_for("relVendas")}}>Relatório de Vendas</a>
+    <a href={{url_for("anuncio")}}>Anúncios</a>
+    <a href={{url_for("pergunta")}}>Perguntas</a>
+    <a href={{url_for("categoria")}}>Categorias</a>
+    <a href={{url_for("favoritos")}}>Favoritos</a>
+
+    <h4>Edição de {{titulo}}</h4>
+    <form action="/usuario/editar/{{ usuario.id }}" method="post">
+        <p><label for="user">Username</label></p>
+        <p><input type="text" id="user" name="user" value="{{usuario.nome}}"></p>
+
+        <p><label for="email">E-mail</label></p>
+        <p><input type="text" id="email" name="email" value="{{usuario.email}}"></p>
+
+        <p><label for="passwd">Senha</label></p>
+        <p><input type="text" id="passwd" name="passwd" value="{{usuario.senha}}"></p>
+
+        <p><input type="submit" value="Alterar"></p>
+    </form>
+    <a href={{url_for("cadusuario")}}><input type="submit" value="Cancelar"></a>
+ 
+</body>
+
+</html>

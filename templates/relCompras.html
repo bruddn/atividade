@@ -6,16 +6,59 @@
 
 <body>
     <h1> Bem vindo ao Pegue aqui!</h1>
-    <a href={{url_for("usuario")}}>Cadastro Usuário</a>
+    <a href={{url_for("cadusuario")}}>Cadastro Usuário</a>
     <a href={{url_for("relCompras")}}>Relatório de Compras</a>
     <a href={{url_for("relVendas")}}>Relatório de Vendas</a>
-    <a href={{url_for("anuncios")}}>Anúncios</a>
+    <a href={{url_for("anuncio")}}>Anúncios</a>
     <a href={{url_for("pergunta")}}>Perguntas</a>
     <a href={{url_for("categoria")}}>Categorias</a>
     <a href={{url_for("favoritos")}}>Favoritos</a>
 
     <h4>{{titulo}}</h4>
-    <h4>Compras realizadas nos últimos meses</h4>
+    <form action="/relatoriosc/criar" method="post">
+            <p><label for="qtd">Quantidade</label>
+            <input type="text" id="qtd" name="qtd"></p>
+    
+            <p><label for="preco">Preco</label>
+            <input type="text" id="preco" name="preco"></p>
+
+            <p><label for="total">Total</label>
+            <input type="text" id ="total" name="total"></p>
+    
+            <p><label for="anu">Anuncio</label>
+            <select id="anu" name="anu">
+                {% for anuncio in anuncios %}
+                    <option value="{{ anuncio.id }}">{{ anuncio.id }}</option>
+                {% endfor %}
+            </select></p>
+    
+            <p><label for="usu">Usuario</label>
+            <input type="text" id="usu" name="usu"></p>
+    
+            <p><input type="submit" value="Cadastrar"></p>
+        </form>
+    
+        <h4>{{titulo}}</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Qtd</th>
+                    <th>Preco</th>
+                    <th>Total</th>
+                    <th>Anuncio</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for relatorioc in relatoriocs %}
+                    <tr>
+                        <td>{{relatorioc.qtd}}</td>
+                        <td>{{relatorioc.preco}}</td>
+                        <td>{{relatorioc.total}}</td>
+                        <td>{{relatorioc.anu_id}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 </body>
 
 </html>

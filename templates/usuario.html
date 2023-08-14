@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html> 
 <head>
-    <title> Pegue aqui - {{titulo}}</title>
+    <title> Pegue aqui - Cadastro de {{titulo}}</title>
 </head>
 
 <body>
     <h1> Bem vindo ao Pegue aqui!</h1>
-    <a href={{url_for("usuario")}}>Cadastro Usuário</a>
+    <a href={{url_for("cadusuario")}}>Cadastro Usuário</a>
     <a href={{url_for("relCompras")}}>Relatório de Compras</a>
     <a href={{url_for("relVendas")}}>Relatório de Vendas</a>
-    <a href={{url_for("anuncios")}}>Anúncios</a>
+    <a href={{url_for("anuncio")}}>Anúncios</a>
     <a href={{url_for("pergunta")}}>Perguntas</a>
     <a href={{url_for("categoria")}}>Categorias</a>
     <a href={{url_for("favoritos")}}>Favoritos</a>
 
     <h4>{{titulo}}</h4>
-    <form action="caduser" method="post">
+    <form action="/usuario/criar" method="post">
         <p><label for="user">Username</label></p>
         <p><input type="text" id="user" name="user"></p>
 
@@ -27,6 +27,30 @@
 
         <p><input type="submit" value="Cadastrar"></p>
     </form>
+
+    <h4>Lista de {{titulo}}</h4>
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th>Senha</th>
+                <th>Editar</th>
+                <th>Deletar</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario in usuarios %}
+                <tr>
+                    <td>{{usuario.nome}}</td>
+                    <td>{{usuario.email}}</td>
+                    <td>{{usuario.senha}}</td>
+                    <td><label for="delet">Deseja fazer alguma alteração? <a href={{ url_for("editarusuario",id=usuario.id) }}><input type="submit" value="Alterar"></a></label></td> 
+                    <td><label for="delet">Tem certeza que deseja deletar? <a href={{ url_for("deletarusuario",id=usuario.id) }}><input type="submit" value="Deletar"></a></label></td> 
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 
 </html>

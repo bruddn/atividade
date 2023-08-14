@@ -1,21 +1,47 @@
 <!DOCTYPE html>
 <html> 
 <head>
-    <title> Pegue aqui - {{titulo}}</title>
+    <title> Pegue aqui - Cadastro de {{titulo}}</title>
 </head>
 
 <body>
     <h1> Bem vindo ao Pegue aqui!</h1>
-    <a href={{url_for("usuario")}}>Cadastro Usuário</a>
+    <a href={{url_for("cadusuario")}}>Cadastro Usuário</a>
     <a href={{url_for("relCompras")}}>Relatório de Compras</a>
     <a href={{url_for("relVendas")}}>Relatório de Vendas</a>
-    <a href={{url_for("anuncios")}}>Anúncios</a>
+    <a href={{url_for("anuncio")}}>Anúncios</a>
     <a href={{url_for("pergunta")}}>Perguntas</a>
     <a href={{url_for("categoria")}}>Categorias</a>
     <a href={{url_for("favoritos")}}>Favoritos</a>
 
-    <h4>Categorias</h4>
+    <h4>Cadastro de {{titulo}}</h4>
+    <form action="/categoria/criar" method="post">
+        <p><label for="nome">Nome</label>
+        <input type="text" id="nome" name="nome"></p>
 
+        <p><label for="desc">Descrição</label>
+        <input type="text" id="desc" name="desc"></p>
+
+        <p><input type="submit" value="Cadastrar"></p>
+    </form>
+
+    <h4>Lista de {{titulo}}</h4>
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Descricao</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for categoria in categorias %}
+            <tr>
+                <td>{{ categoria.nome }}</td>
+                <td>{{ categoria.desc }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 
 </html>
