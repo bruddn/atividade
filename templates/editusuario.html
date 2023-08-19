@@ -2,32 +2,49 @@
 <html> 
 <head>
     <title> Pegue aqui - Edição de {{titulo}}</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.css">
 </head>
 
 <body>
-    <h1> Bem vindo ao Pegue aqui!</h1>
-    <a href={{url_for("cadusuario")}}>Cadastro de Usuário</a>
-    <a href={{url_for("relCompras")}}>Relatório de Compras</a>
-    <a href={{url_for("relVendas")}}>Relatório de Vendas</a>
-    <a href={{url_for("anuncio")}}>Anúncios</a>
-    <a href={{url_for("pergunta")}}>Perguntas</a>
-    <a href={{url_for("categoria")}}>Categorias</a>
-    <a href={{url_for("favoritos")}}>Favoritos</a>
+    <div class="container">
+        <div class="page-header" style="height: 10vh; display: flex; justify-content: space-around; align-items: center; margin-top: 5px; margin-bottom: -10px">
+            <h1>Bem vindo ao Pegue aqui!</h1>
+        </div>
+    </div>
 
-    <h4>Edição de {{titulo}}</h4>
-    <form action="/usuario/editar/{{ usuario.id }}" method="post">
-        <p><label for="user">Username</label></p>
-        <p><input type="text" id="user" name="user" value="{{usuario.nome}}"></p>
+    <div class="container">
+        <div class="page-header" style="height: 10vh; display: flex; justify-content: space-around; align-items: center;">
+            <a href={{url_for("cadusuario")}}>Cadastro de Usuário</a>
+            <a href={{url_for("relCompras")}}>Relatório de Compras</a>
+            <a href={{url_for("relVendas")}}>Relatório de Vendas</a>
+            <a href={{url_for("anuncio")}}>Anúncios</a>
+            <a href={{url_for("pergunta")}}>Perguntas</a>
+            <a href={{url_for("categoria")}}>Categorias</a>
+            <a href={{url_for("favoritos")}}>Favoritos</a>
+        </div>
+    </div>
 
-        <p><label for="email">E-mail</label></p>
-        <p><input type="text" id="email" name="email" value="{{usuario.email}}"></p>
+    <div class="page-header" style="height: 20hv; display: flex; justify-content:space-around; align-items: center; margin-top: 5px; margin-bottom: 5px;">
+        <h4>Edição de {{titulo}}</h4>
+    </div>
+        <form action="/usuario/editar/{{ usuario.id }}" method="post">
+            <div class="form-group">
+                <label for="user">Username</label>
+                <input type="text" class="form-control" id="user" name="user" value="{{usuario.nome}}">
+            </div> 
 
-        <p><label for="passwd">Senha</label></p>
-        <p><input type="text" id="passwd" name="passwd" value="{{usuario.senha}}"></p>
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input type="text" class="form-control" id="email" name="email" value="{{usuario.email}}">
+            </div>
 
-        <p><input type="submit" value="Alterar"></p>
-    </form>
-    <a href={{url_for("cadusuario")}}><input type="submit" value="Cancelar"></a>
+            <div class="form-group">
+                <label for="passwd">Senha</label>
+                <input type="text" id="passwd" name="passwd" value="{{usuario.senha}}">
+            </div>
+            <button type="submit" class="'btn btn-primary" style="margin-top: 10px;">Alterar</button>
+        </form>
+        <a href={{url_for("cadusuario")}}><input type="submit" value="Cancelar"></a>
  
 </body>
 
