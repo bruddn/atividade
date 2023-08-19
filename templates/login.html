@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head> 
+    <title>Pegue aqui - Login</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.css">
+</head>
+
+<body>
+    <div class="page-header" style="height: 50hv; display: flex; justify-content:space-around; align-items: center; margin-top: 80px;">
+        <h4>LOGIN - PEGUE AQUI!</h4>
+    </div>
+    <form action="/login" method="post">
+        <div class="form-group" style="padding: 1.5em; max-width: 30%; justify-content:space-around; align-items: center; margin-top: 50px; margin-bottom: -10px; margin-left: 550px;">
+            <label for="email">Email</label>
+            <input type="text" class="form-control" id="email" name="email">
+        </div>
+
+        <div class="form-group" style="padding: 1.5em; max-width: 30%; justify-content:space-around; align-items: center; margin-top: 50px; margin-bottom: 30px; margin-left: 550px;">
+            <label for="passwd">Senha</label>
+            <input type="password" class="form-control" id="passwd" name="passwd">  
+        </div>
+        <button type="submit" class="'btn btn-primary" style="text-transform: uppercase; width: 30%; padding: 10px; cursor: pointer; opacity: 18; margin-left: 550px;">Logar</button>
+           
+        <div class="container">
+            <div class="page-header" style="height: 10vh; display: flex; justify-content: space-around; align-items: center;">
+                <a href={{url_for("cadusuario")}}>Não tem conta? Crie aqui!</a>
+            </div>
+        </div>
+    </form>
+</html>
+
+

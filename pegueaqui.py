@@ -5,14 +5,26 @@ from flask import request
 from flask_sqlalchemy import SQLAlchemy
 from flask import url_for
 from flask import redirect
-
+from flask_login import (current_user, LoginManager,
+                             login_user, logout_user,
+                             login_required)
+import hashlib
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://testeuser:22toledoads24@localhost:3306/pegueaqui'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://testeuser:22toledoads24@localhost:3306/pegueaqui'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://brunadneves:22toledoads24@brunadneves.mysql.pythonanywhere-services.com:3306/brunadneves$pegueaqui'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+
+app.secret_key = '22tadstoledo24'
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+global userlogado
+
+
 
 class Usuario(db.Model):
     __tablename__ = "usuario"
@@ -25,6 +37,19 @@ class Usuario(db.Model):
         self.nome = nome
         self.email = email
         self.senha = senha 
+    
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return str(self.id)
+
 
 class Categoria(db.Model):
     __tablename__ = "categoria"
@@ -100,8 +125,8 @@ class Pergunta(db.Model):
         self.usu_id = usu_id
         self.anu_id = anu_id
 
-class Favoritos(db.Model):
-    __tablename__ = "favoritos"
+class Favorito(db.Model):
+    __tablename__ = "favorito"
     id = db.Column('fav_id', db.Integer, primary_key=True)
     usu_id = db.Column('usu_id', db.Integer, db.ForeignKey("usuario.usu_id"))
     anu_id = db.Column('anu_id', db.Integer, db.ForeignKey("anuncio.anu_id"))
@@ -114,17 +139,46 @@ class Favoritos(db.Model):
 def paginanaoencontrada(error):
     return render_template('pagnaoencontrada.html')
 
+@login_manager.user_loader
+def load_user(id):
+    return Usuario.query.get(id)
+
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    global userlogado
+    if request.method == 'POST':
+        email =  request.form.get('email')
+        passwd = hashlib.sha512(str(request.form.get('passwd')).encode("utf-8")).hexdigest()
+
+        user = Usuario.query.filter_by(email=email, senha=passwd). first()
+
+        if user:
+            userlogado = user.id
+            login_user(user)
+            return redirect(url_for('index'))
+        else:
+            return redirect(url_for('login'))
+    return render_template('login.html')
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
+
 @app.route("/")
+@login_required
 def index ():
-    return render_template('index.html')
+    return render_template('index.html', anuncios = Anuncio.query.all(), categorias = Categoria.query.all(), titulo="Anuncios")
 
 @app.route("/cad/usuario")
 def cadusuario():
     return render_template('usuario.html', usuarios = Usuario.query.all(), titulo = 'Usuario')
 
+
 @app.route("/usuario/criar", methods=['POST'])
 def criarusuario():
-    usuario = Usuario(request.form.get('user'), request.form.get('email'), request.form.get('passwd'))
+    hash = hashlib.sha512(str(request.form.get('passwd')).encode("utf-8")).hexdigest()
+    usuario = Usuario(request.form.get('user'), request.form.get('email'), hash)
     db.session.add(usuario)
     db.session.commit()
     return redirect(url_for('cadusuario'))
@@ -140,7 +194,7 @@ def editarusuario(id):
     if request.method =='POST':
         usuario.nome = request.form.get('user')
         usuario.email = request.form.get('email')
-        usuario.senha = request.form.get('passwd')
+        usuario.senha = hashlib.sha512(str(request.form.get('passwd')).encode("utf-8")).hexdigest()
         db.session.add(usuario)
         db.session.commit()
         return redirect(url_for('cadusuario'))
@@ -156,7 +210,7 @@ def deletarusuario(id):
 
 @app.route("/relatorios/compras")
 def relCompras():
-    return render_template('relCompras.html', relatoriocs = Relatorioc.query.all(), titulo = 'Relatorio de Compras')
+    return render_template('relCompras.html', relatoriocs = Relatorioc.query.all(), titulo = 'Relatório de Compras')
 
 @app.route("/relatoriosc/criar", methods=['POST'])
 def criarrelatorioc():
@@ -167,7 +221,7 @@ def criarrelatorioc():
 
 @app.route("/relatorios/vendas")
 def relVendas():
-    return render_template('relVendas.html', relatoriovs = Relatoriov.query.all(), titulo = 'Relatorio de Vendas')
+    return render_template('relVendas.html', relatoriovs = Relatoriov.query.all(), titulo = 'Relatório de Vendas')
 
 @app.route("/relatoriosv/criar", methods=['POST'])
 def criarrelatoriov():
@@ -178,12 +232,35 @@ def criarrelatoriov():
 
 @app.route("/cad/anuncio")
 def anuncio():
-    return render_template('anuncio.html', categorias = Categoria.query.all(), anuncios = Anuncio.query.all(), titulo='Anuncios')
+    return render_template('anuncio.html', anuncios = Anuncio.query.all(), categorias = Categoria.query.all(), titulo="Anuncio") # Anuncio.filter_by(usu_id=userlogado) não funcionou, apareceu attributerror: type object 'Anuncio' has no attribute 'filter'
 
 @app.route("/anuncio/criar", methods=['POST'])
 def criaranuncio():
-    anuncio = Anuncio(request.form.get('nome'), request.form.get('desc'), request.form.get('qtd'), request.form.get('preco'), request.form.get('cat'), request.form.get('uso'))
+    global userlogado
+    anuncio = Anuncio(request.form.get('nome'), request.form.get('desc'), request.form.get('qtd'), request.form.get('preco'), request.form.get('cat'), userlogado) # request.form.get('uso'))
     db.session.add(anuncio)
+    db.session.commit()
+    return redirect(url_for('anuncio'))
+
+@app.route("/anuncio/editar/<int:id>", methods=['GET', 'POST'])
+def editaranuncio(id):
+    anuncio = Anuncio.query.get(id)
+    if request.method =='POST':
+        anuncio.nome = request.form.get('nome')
+        anuncio.descricao = request.form.get('desc')
+        anuncio.quantidade = request.form.get('qtd')
+        anuncio.preco = request.form.get('preco')
+        anuncio.categoria = request.form.get('cat')
+        db.session.add(anuncio)
+        db.session.commit()
+        return redirect(url_for('anuncio'))
+    
+    return render_template('editanuncio.html', anuncio = anuncio, titulo = 'Anuncio')
+
+@app.route("/anuncio/deletar/<int:id>")
+def deletaranuncio(id):
+    anuncio = Anuncio.query.get(id)
+    db.session.delete(anuncio)
     db.session.commit()
     return redirect(url_for('anuncio'))
 
@@ -212,11 +289,11 @@ def criarcategoria():
 
 @app.route("/favoritos")
 def favoritos():
-    return render_template('favoritos.html', favoritos = Favoritos.query.all(), titulo='Favoritos')
+    return render_template('favoritos.html', favoritos = Favorito.query.all(), titulo='Favoritos')
 
 @app.route("/favoritos/criar", methods=['POST'])
 def criarfavoritos():
-    favoritos = Favoritos(request.form.get('usu'), request.form.get('anu'))
+    favoritos = Favorito(request.form.get('usu'), request.form.get('anu'))
     db.session.add(favoritos)
     db.session.commit()
     return redirect(url_for('favoritos'))

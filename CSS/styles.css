@@ -1,0 +1,8 @@
+#event-description {
+    height: 100vh;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    color: var(--text-color);
+    font-weight: bold;
+}

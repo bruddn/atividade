@@ -2,17 +2,54 @@
 <html> 
 <head>
     <title> Pegue aqui </title>
+    <link rel="stylesheet" href="../static/css/bootstrap.css">
 </head>
 
 <body>
-    <h1> Bem vindo ao Pegue aqui!</h1>
-    <p><a href={{url_for("cadusuario")}}>Cadastro Usuário</a></p>
-    <p><a href={{url_for("relCompras")}}>Relatório de Compras</a></p>
-    <p><a href={{url_for("relVendas")}}>Relatório de Vendas</a></p>
-    <p><a href={{url_for("anuncio")}}>Anúncios</a></p>
-    <p><a href={{url_for("pergunta")}}>Perguntas</a></p>
-    <p><a href={{url_for("categoria")}}>Categorias</a></p>
-    <p><a href={{url_for("favoritos")}}>Favoritos</a></p>
+    <div class="container">
+        <div class="page-header" style="height: 10vh; display: flex; justify-content: space-around; align-items: center; margin-top: 5px; margin-bottom: -10px">
+            <h1>Bem vindo ao Pegue aqui!</h1>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page-header" style="height: 10vh; display: flex; justify-content: space-around; align-items: center;">
+            <a href={{url_for("cadusuario")}}>Cadastro de Usuário</a>
+            <a href={{url_for("relCompras")}}>Relatório de Compras</a>
+            <a href={{url_for("relVendas")}}>Relatório de Vendas</a>
+            <a href={{url_for("anuncio")}}>Anúncios</a>
+            <a href={{url_for("pergunta")}}>Perguntas</a>
+            <a href={{url_for("categoria")}}>Categorias</a>
+            <a href={{url_for("favoritos")}}>Favoritos</a>
+            <a href={{url_for("logout")}}>Logout</a>
+        </div>
+    </div>
+
+    <div class="page-header" style="height: 20hv; display: flex; justify-content:space-around; align-items: center; margin-top: 5px; margin-bottom: 5px;">
+        <h4>Lista de {{titulo}}</h4>
+    </div>
+    <table class="table table-striped table-responsive table-bordered" style="justify-content:space-around; align-items: center;">
+        <thead class="thread-default">
+            <tr>
+                <th>Nome</th>
+                <th>Desc</th>
+                <th>Qtd</th>
+                <th>Preco</th>
+                <th>Categoria</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for anuncio in anuncios %}
+                <tr>
+                    <td>{{anuncio.nome}}</td>
+                    <td>{{anuncio.desc}}</td>
+                    <td>{{anuncio.qtd}}</td>
+                    <td>{{anuncio.preco}}</td>
+                    <td>{{anuncio.cat_id}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 
 </html>

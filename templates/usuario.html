@@ -1,56 +1,81 @@
 <!DOCTYPE html>
 <html> 
 <head>
-    <title> Pegue aqui - Cadastro de {{titulo}}</title>
+    <title> Pegue aqui - {{titulo}}</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.css">
 </head>
 
 <body>
-    <h1> Bem vindo ao Pegue aqui!</h1>
-    <a href={{url_for("cadusuario")}}>Cadastro Usuário</a>
-    <a href={{url_for("relCompras")}}>Relatório de Compras</a>
-    <a href={{url_for("relVendas")}}>Relatório de Vendas</a>
-    <a href={{url_for("anuncio")}}>Anúncios</a>
-    <a href={{url_for("pergunta")}}>Perguntas</a>
-    <a href={{url_for("categoria")}}>Categorias</a>
-    <a href={{url_for("favoritos")}}>Favoritos</a>
+    <div class="container">
+        <div class="page-header" style="height: 10vh; display: flex; justify-content: space-around; align-items: center; margin-top: 5px; margin-bottom: -10px">
+            <h1>Bem vindo ao Pegue aqui!</h1>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="page-header" style="height: 10vh; display: flex; justify-content: space-around; align-items: center;">
+            <a href={{url_for("cadusuario")}}>Cadastro de Usuário</a>
+            <a href={{url_for("relCompras")}}>Relatório de Compras</a>
+            <a href={{url_for("relVendas")}}>Relatório de Vendas</a>
+            <a href={{url_for("anuncio")}}>Anúncios</a>
+            <a href={{url_for("pergunta")}}>Perguntas</a>
+            <a href={{url_for("categoria")}}>Categorias</a>
+            <a href={{url_for("favoritos")}}>Favoritos</a>
+            <a href={{url_for("logout")}}>Logout</a>
+        </div>
+    </div>
 
-    <h4>{{titulo}}</h4>
-    <form action="/usuario/criar" method="post">
-        <p><label for="user">Username</label></p>
-        <p><input type="text" id="user" name="user"></p>
+    <div class="container">
+        <div class="page-header" style="height: 10vh; display: flex; justify-content: space-around; align-items: center; margin-top: 5px; margin-bottom: -10px">
+            <h4>Cadastro de {{titulo}}</h4>
+        </div>
 
-        <p><label for="email">E-mail</label></p>
-        <p><input type="text" id="email" name="email"></p>
-
-        <p><label for="passwd">Senha</label></p>
-        <p><input type="text" id="passwd" name="passwd"></p>
-
-        <p><input type="submit" value="Cadastrar"></p>
-    </form>
-
-    <h4>Lista de {{titulo}}</h4>
-    <table>
-        <thead>
-            <tr>
-                <th>Nome</th>
-                <th>E-mail</th>
-                <th>Senha</th>
-                <th>Editar</th>
-                <th>Deletar</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for usuario in usuarios %}
+        <form action="/usuario/criar" method="post">
+            <div class="form-group">
+                <label for="user">Username</label>
+                <input type="text" class="form-control" id="user" name="user">
+            </div>
+                <label for="email">E-mail</label>
+                <input type="text" class="form-control" id="email" name="email">
+                <small id="emailHelp" class="form-text text-muted">O seu e-mail não será compartilhado com ninguém</small>
+            <div class="form-group">
+                
+            <div class="form-group">
+                <label for="passwd">Senha</label>
+                <input type="text" class="form-control" id="passwd" name="passwd">
+            </div>
+            <button type="submit" class="'btn btn-primary" style="margin-top: 10px;">Cadastrar</button>
+        </form>
+    </div>
+    
+    <div class="container">
+        <div class="page-header" style="height: 20hv; display: flex; justify-content:space-around; align-items: center; margin-top: 5px; margin-bottom: 5px;">
+            <h4>Lista de {{titulo}}</h4>
+        </div>
+        
+        <table class="table table-striped table-responsive table-bordered" style="justify-content:space-around; align-items: center; margin-left: -115px;">
+            <thead class="thread-default">
                 <tr>
-                    <td>{{usuario.nome}}</td>
-                    <td>{{usuario.email}}</td>
-                    <td>{{usuario.senha}}</td>
-                    <td><label for="delet">Deseja fazer alguma alteração? <a href={{ url_for("editarusuario",id=usuario.id) }}><input type="submit" value="Alterar"></a></label></td> 
-                    <td><label for="delet">Tem certeza que deseja deletar? <a href={{ url_for("deletarusuario",id=usuario.id) }}><input type="submit" value="Deletar"></a></label></td> 
+                    <th>Nome</th>
+                    <th>E-mail</th>
+                    <th>Senha</th>
+                    <th>Editar</th>
+                    <th>Deletar</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for usuario in usuarios %}
+                    <tr>
+                        <td>{{usuario.nome}}</td>
+                        <td>{{usuario.email}}</td>
+                        <td>{{usuario.senha}}</td>
+                        <td><label for="delet">Deseja fazer alguma alteração? <a href={{ url_for("editarusuario",id=usuario.id) }}><input type="submit" value="Alterar"></a></label></td>
+                        <td><label for="delet">Tem certeza que deseja deletar? <a href={{ url_for("deletarusuario",id=usuario.id) }}><input type="submit" value="Deletar"></a></label></td> 
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </body>
 
 </html>

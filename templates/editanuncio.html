@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <title> Pegue aqui - Edição de {{titulo}}</title>
+</head>
+
+<body>
+    <h1> Bem vindo ao Pegue aqui!</h1>
+    <a href={{url_for("cadusuario")}}>Cadastro de Usuário</a>
+    <a href={{url_for("relCompras")}}>Relatório de Compras</a>
+    <a href={{url_for("relVendas")}}>Relatório de Vendas</a>
+    <a href={{url_for("anuncio")}}>Anúncios</a>
+    <a href={{url_for("pergunta")}}>Perguntas</a>
+    <a href={{url_for("categoria")}}>Categorias</a>
+    <a href={{url_for("favoritos")}}>Favoritos</a>
+
+    <h4>Edição de {{titulo}}</h4>
+    <form action="/anuncio/editar/{{ anuncio.id }}" method="post">
+        <p><label for="user">Nome</label></p>
+        <p><input type="text" id="nome" name="nome" value="{{anuncio.nome}}"></p>
+
+        <p><label for="desc">Descrição</label></p>
+        <p><input type="text" id="desc" name="desc" value="{{anuncio.desc}}"></p>
+
+        <p><label for="qtd">Quantidade</label></p>
+        <p><input type="text" id="qtd" name="qtd" value="{{anuncio.qtd}}"></p>
+
+        <p><label for="preco">Preço</label></p>
+        <p><input type="text" id="preco" name="preco" value="{{anuncio.preco}}"></p>
+
+        <p><label for="cat">Categoria</label></p>
+        <p><input type="text" id="cat" name="cat" value="{{anuncio.cat}}"></p>
+
+        <p><input type="submit" value="Alterar"></p>
+    </form>
+    <a href={{url_for("anuncio")}}><input type="submit" value="Cancelar"></a>
+ 
+</body>
+
+</html>
